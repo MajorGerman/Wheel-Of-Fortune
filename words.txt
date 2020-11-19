@@ -1,0 +1,3 @@
+bread; food
+hammer; tool
+russia; country

@@ -1,16 +1,6 @@
 import random
 
-def separate(string):
-    array = []
-    for i in string:
-        array.append(i)
-    return array
-
-def unite(array):
-    string = ""
-    for i in array:
-        string += str(i)
-    return string
+global words, lines, words, used, quessed, quessed_word, quessed_word2, quessed_word3
 
 words = open("words.txt", "r")
 lines = words.readlines()    
@@ -26,16 +16,24 @@ wheel = ["0", "100", "1000", "200", "500"]
 
 work = True
 
-score = 0
-attempts = 0
+def separate(string):
+    array = []
+    for i in string:
+        array.append(i)
+    return array
 
-print("-- Wheel of Fortune --\n")
+def unite(array):
+    string = ""
+    for i in array:
+        string += str(i)
+    return string
 
-while work:      
+def turn(player):
+    global words, lines, words, used, quessed, quessed_word, quessed_word2, quessed_word3
     print("\nTopic: " + question)
     print(quessed_word2)
     print("\nLetters used: " + ", ".join(used))
-    print("\nSpin the wheel!")
+    print("\nSpin the wheel, " + player.name + "!")
     input()
     wheel_choice = int(random.choice(wheel))
     print(wheel_choice)
@@ -44,32 +42,50 @@ while work:
         word = input("Your word: ")
         if word == quessed_word3:
             print("You win!")
-            score += wheel_choice
-            print("Score: " + str(score))
-            work = False
+            player.score += wheel_choice
+            return 0
         else:
             print("No! Incorrect word!")
-            attempts += 1
     elif choice == 1:
         letter = input("Your letter: ")
         if quessed_word.find(letter) != -1 and letter != "":
             print("Yes!")
-            score += wheel_choice
+            player.score += wheel_choice
             while quessed_word.find(letter) != -1:
                 quessed_word2 = separate(quessed_word2)
                 quessed_word2[quessed_word.find(letter)] = letter
                 quessed_word = quessed_word.replace(letter, "^", 1)
                 quessed_word2 = unite(quessed_word2)
-            if quessed_word.count("^") == len(quessed_word):
-                print("You win!")
-                print("Score: " + str(score))                
-                work = False     
+            if quessed_word.count("^") == len(quessed_word):               
+                return 0
         else:
             print("No! Incorrect letter!") 
             used.append(letter)
-            attempts += 1   
     elif choice == 3:
-        work = False
-    if attempts >= 3:
-        print("\nYou lose!")
-        work = False             
+        return 3        
+    
+class Player():
+    name = ""
+    score = 0
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
+    
+
+print("-- Wheel of Fortune --\n")
+
+players = int(input("Input player count: "))
+
+players = [Player("player " + str(i)) for i in range(players)]
+
+while work:      
+    for i in players:
+        returnment = turn(i)
+        if returnment == 0:
+            print(i.name + " win!")
+            print("His score: " + str(i.score))
+            work = False
+            break
+        elif returnment == 3:
+            work = False
+            break

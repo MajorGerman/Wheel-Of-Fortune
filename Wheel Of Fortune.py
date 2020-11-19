@@ -15,7 +15,6 @@ def unite(array):
 words = open("words.txt", "r")
 lines = words.readlines()    
 words = len(lines)
-
 used = []
 
 quessed = random.choice(lines)
@@ -31,8 +30,6 @@ score = 0
 attempts = 0
 
 print("-- Wheel of Fortune --\n")
-
-print(separate(quessed_word2))
 
 while work:      
     print("\nTopic: " + question)

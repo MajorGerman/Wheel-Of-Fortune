@@ -1,18 +1,19 @@
+# coding: utf8
 import random
 
 global words, lines, words, used, quessed, quessed_word, quessed_word2, quessed_word3
 
-words = open("words.txt", "r")
+words = open("words.txt", encoding='utf8')
 lines = words.readlines()    
 words = len(lines)
 used = []
 
 quessed = random.choice(lines)
-quessed_word, question = quessed.replace("\n","").replace(" ", "").split(";")
-quessed_word2 = "_" * len(quessed_word)
+quessed_word, question = quessed.replace("\n","").split(";")
+quessed_word2 = "*" * len(quessed_word)
 quessed_word3 = quessed_word
 
-wheel = ["0", "100", "1000", "200", "500"]
+wheel = ["0", "100", "200", "300", "400","500", "600", "700", "800", "900", "1000"]
 
 work = True
 
@@ -52,7 +53,7 @@ def turn(player):
             print("Yes!")
             player.score += wheel_choice
             while quessed_word.find(letter) != -1:
-                quessed_word2 = separate(quessed_word2)
+                quessed_word2 = separate(quessed_word2) 
                 quessed_word2[quessed_word.find(letter)] = letter
                 quessed_word = quessed_word.replace(letter, "^", 1)
                 quessed_word2 = unite(quessed_word2)
